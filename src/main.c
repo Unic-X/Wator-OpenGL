@@ -1,56 +1,24 @@
-#include <stddef.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
+#include "utils.h"
+#include "fish.h"
 
 #define MIN_SIZE 2
 #define DEBUG_ON
-
 #define BOARD_SIZE 200
-
-typedef struct Vector{
-  size_t size;
-  int  *data;
-  size_t capacity;
-} vector ;
-
-typedef struct PlanerCoordinates{
-  float_t x;
-  float_t y;
-} planer_c;
-
-typedef enum kind{
-  Fish,
-  Shark
-}kind;
-
-typedef struct Creature{
-  kind kin;
-  planer_c coord;
-  int energy;
-} Creature;
+#define ENERGY_F 20
+#define SHARK_F 2
 
 
-Creature create_creature(kind k,int energy){
-  Creature creature;
+Creature drawFish(int x,int y){
+  Creature c;
   planer_c coords;
-  coords.x = rand() % BOARD_SIZE;
-  
-  switch (k) {
-    case Fish:
-      creature.kin = Fish;
-      creature.energy = energy;
-      creature.coord = coords;
-      break;
-
-    case Shark:
-      creature.kin = Fish;
-      creature.energy = energy;
-      creature.coord = coords;
-      break;
-  }
-  return creature;
+  coords.x = x, coords.y = y;
+  c.coord = coords;
+  c.kin = Fish;
+  c.energy = ENERGY_F;
+  return c;
 }
+
+void moveFish (Creature * c);
 
 
 

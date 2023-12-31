@@ -1,51 +1,70 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <stdbool.h>
+#include <GL/gl.h>
+#include <GL/glut.h>   // freeglut.h might be a better alternative, if available.
 
-int main(){
-  glewExperimental = true; // Needed for core profile
-  if( !glfwInit() )
-  {
-      fprintf( stderr, "Failed to initialize GLFW\n" );
-      return -1;
-  }
+#ifndef GUI_H_
+#define GUI_H_
 
-  glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.3
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL 
+#define COLUMNS 100
+#define ROWS 100
+#define FPS 60
 
-  // Open a window and create its OpenGL context
-  GLFWwindow* window = glfwCreateWindow( 1024, 768, "Tutorial 01", NULL, NULL);
-  if(!window){
-      fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
-      glfwTerminate();
-      return -1;
-  }
-  glfwMakeContextCurrent(window); // Initialize GLEW
-  if (glewInit() != GLEW_OK) {
-      fprintf(stderr, "Failed to initialize GLEW\n");
-      return -1;
-  }
-
-  glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-
-  do{
-      // Clear the screen. It's not mentioned before Tutorial 02, but it can cause flickering, so it's there nonetheless.
-      glClear( GL_COLOR_BUFFER_BIT );
-
-      // Draw nothing, see you in tutorial 2 !
-
-      // Swap buffers
-      glfwSwapBuffers(window);
-      glfwPollEvents();
-
-  } // Check if the ESC key was pressed or the window was closed
-  while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-         glfwWindowShouldClose(window) == 0 );
-
-
+void square(int x,int y){
+  glLineWidth(1.0);
+  glColor3f(1.0,1.0,1.0);
+  glBegin(GL_LINE_LOOP);
+    glVertex2f(x,y);
+    glVertex2f(x+1,y);
+    glVertex2f(x+1,y+1);
+    glVertex2f(x,y+1);
+  glEnd();
 }
+
+
+void drawGrid(){
+  for (int x=0; x<COLUMNS; x++) {
+    for (int y = 0; y < ROWS; y++) {
+      square(x,y);
+    }
+  }
+}
+
+
+void display() {  // Display function will draw the image. baiscally the main drawing loop
+ 
+    glClearColor( 0.3, 0.2, 0.3, 1 );  // (In fact, this is the default.)
+    glClear( GL_COLOR_BUFFER_BIT );
+    drawGrid();
+    glutSwapBuffers(); 
+ 
+}
+
+void reshape_callback(int width,int height){
+  glViewport(0, 0, width, height);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(0.0, COLUMNS, 0.0, COLUMNS, -1.0, 1.0);
+  glMatrixMode(GL_MODELVIEW);
+}
+
+void timer_func(){
+  glutPostRedisplay();
+  glutTimerFunc(1000/FPS,timer_func,0);
+}
+
+int main( int argc, char** argv ) {  // Initialize GLUT and 
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE);    
+    glutInitWindowSize(1024,1024);         // Size of display area, in pixels.
+    glutCreateWindow("WatorGL"); // Parameter is window title.
+    glutDisplayFunc(display);            // Called when the window needs to be redrawn.
+    glutReshapeFunc(reshape_callback); // In order to preserve the grid
+    glutTimerFunc(0, timer_func,0);
+    glutMainLoop(); // Run the event loop!  This function does not return.
+    return 0;
+}
+
+
+#endif /* ifndef GUI_H_ */
