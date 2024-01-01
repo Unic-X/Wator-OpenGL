@@ -3,7 +3,6 @@
 #include "gui.c"
 #include <stdio.h>
 
-
 #define MIN_SIZE 2
 #define DEBUG_ON
 
@@ -19,6 +18,12 @@
 // 1. Define for Generic Type                           -- Done(Defined for Creature Instead)
 // 2. Represneting Toroidal Geometry in plane           -- Done
 // 3. Simulating Prey/ Preadtor behaviour via rules    
+// 4. Impl Quick Sort for the coordinates because : 
+//    1. Takes nlogn for sorting
+//    2. Sorting makes logn search easier (Binary Search)
+//    3. Total search will take nlogn but since reproduction is lesser => lesser sorting
+//    lesser memory 
+//
 //
 //
 // Rules for fish
@@ -39,10 +44,16 @@ int main(int argc, char** argv )
   a.energy = 30;
   a.kin = Fish;
   a.coord = (planer_c){4,5};
-  vector * v = new_vec(256);
+  vector * v = new_vec(4);
   vec_add(v, a);
   vec_add(v, a);
   vec_add(v, a); vec_add(v, a);  vec_add(v, a); 
+  vec_del(v, 3);
+  vec_del(v, 2);
+  vec_del(v, 0);
+  vec_del(v, 0);
+  vec_del(v, 0);
+
   printf("%u\n",v->capacity);
 }
 
