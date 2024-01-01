@@ -7,8 +7,8 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 typedef struct PlanerCoordinates{
-  float_t x;
-  float_t y;
+  int x;
+  int y;
 } planer_c;
 
 typedef enum kind{

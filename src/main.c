@@ -2,6 +2,9 @@
 #include "fish.c"
 #include "gui.c"
 #include <stdio.h>
+#include <stdlib.h>
+
+#include <unistd.h>
 
 #define MIN_SIZE 2
 #define DEBUG_ON
@@ -22,7 +25,7 @@
 //    1. Takes nlogn for sorting
 //    2. Sorting makes logn search easier (Binary Search)
 //    3. Total search will take nlogn but since reproduction is lesser => lesser sorting
-//    lesser memory 
+//    nlogn calls and more logn search
 //
 //
 //
@@ -39,22 +42,17 @@
 // P5. A shark dies if its energy level drops to zero.
 
 int main(int argc, char** argv )
-{
-  Creature a;
-  a.energy = 30;
-  a.kin = Fish;
-  a.coord = (planer_c){4,5};
-  vector * v = new_vec(4);
-  vec_add(v, a);
-  vec_add(v, a);
-  vec_add(v, a); vec_add(v, a);  vec_add(v, a); 
-  vec_del(v, 3);
-  vec_del(v, 2);
-  vec_del(v, 0);
-  vec_del(v, 0);
-  vec_del(v, 0);
+{ 
+  Creature * fish = drawFish(1, 2);
+  vector * fishes = new_vec(4);
+  vec_add(fishes, *fish);
+  vector * sharks = new_vec(4);
 
-  printf("%u\n",v->capacity);
+  while (1) {
+    planer_c next_move = moveFish(fish, fishes, sharks);
+    printf("%d %d\n",fish->coord.x,fish->coord.y);
+    usleep(10);
+  }
 }
 
 

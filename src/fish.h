@@ -5,9 +5,9 @@
 #define ENERGY_F 20
 
 
-planer_c moveFish(Creature * creature);
+planer_c moveFish(Creature * creature,vector * fishes,vector * sharks);
 
-Creature drawFish(int x,int y);
+Creature * drawFish(int x,int y);
 
 planer_c reproduceFish(Creature * creature);
 

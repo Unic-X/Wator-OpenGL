@@ -4,7 +4,6 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#define DEBUG_ON
 
 vector * new_vec(size_t init_cap){
   vector * v = (vector *)malloc(sizeof(vector));
@@ -12,9 +11,11 @@ vector * new_vec(size_t init_cap){
   if (!(v->data)) fprintf(stderr, "Memory Error Cannot assign Vector ");
   v->size = 0;
   v->capacity = init_cap;
+
    #ifdef DEBUG_ON
     printf("V_ALLC: AT %p \n",v);
   #endif //DEBUG_ON
+  
   return v; //Success
 
 }
