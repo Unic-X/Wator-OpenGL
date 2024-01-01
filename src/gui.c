@@ -1,3 +1,4 @@
+#include <GL/freeglut_std.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/gl.h>
@@ -10,9 +11,9 @@
 #define ROWS 100
 #define FPS 60
 
-void square(int x,int y){
+void square(int x,int y,char R,char G,char B){
   glLineWidth(1.0);
-  glColor3f(1.0,1.0,1.0);
+  glColor3ub(R,G,B);
   glBegin(GL_LINE_LOOP);
     glVertex2f(x,y);
     glVertex2f(x+1,y);
@@ -25,7 +26,7 @@ void square(int x,int y){
 void drawGrid(){
   for (int x=0; x<COLUMNS; x++) {
     for (int y = 0; y < ROWS; y++) {
-      square(x,y);
+      square(x,y,(char)255,(char)255,(char)255);
     }
   }
 }
@@ -48,12 +49,12 @@ void reshape_callback(int width,int height){
   glMatrixMode(GL_MODELVIEW);
 }
 
-void timer_func(){
+void timer_func(){ //For setting up FPS
   glutPostRedisplay();
   glutTimerFunc(1000/FPS,timer_func,0);
 }
 
-int main( int argc, char** argv ) {  // Initialize GLUT and 
+int main_loop( int argc, char** argv ) {  // Initialize GLUT and 
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE);    
