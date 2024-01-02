@@ -7,9 +7,8 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
-#define COLUMNS 50
-#define ROWS 50
-#define FPS 5
+#define COLUMNS 40
+#define ROWS 40
 
 typedef struct PlanerCoordinates{
   int x;
@@ -55,7 +54,7 @@ void vec_del(vector *v, int index) ;
 
 bool is_free(planer_c c,vector * fishes,vector * sharks);
 
-bool is_free_for_shark(planer_c c,vector * fishes,vector * sharks);
+bool is_free_for_shark(planer_c c,vector * sharks);
 
 void wrapCoordinates(planer_c *point);
 

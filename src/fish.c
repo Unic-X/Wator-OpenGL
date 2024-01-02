@@ -3,11 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
- *  Handles wrap around
- */
-
-
 planer_c moveFish(Creature *fish,vector * fishes,vector * sharks){
   //Energy of fish never deplets but  only when they Reproduce
   

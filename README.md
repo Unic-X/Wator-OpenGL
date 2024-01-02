@@ -19,23 +19,23 @@ Before running the simulation, ensure you have the following prerequisites insta
 
 Follow these steps to build and run the simulation:
 
-1. **Clone the Repository:**
+**Clone the Repository:**
 
-   ```sh
-   git clone https://github.com/Unic-X/Wator-OpenGL.git
+```sh
+git clone https://github.com/Unic-X/Wator-OpenGL.git
 
-   cd wator-simulation
-    ```
-2. **Make binary**
+cd wator-simulation
+```
+**Make binary**
 
-    ```sh
-    make
-    ```
-3. **Run Simulation**
+```sh
+make
+```
+**Run Simulation**
 
-    ```sh
-    ./main
-    ```
+```sh
+./main
+```
 
 ## Customization
 

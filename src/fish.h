@@ -2,8 +2,7 @@
 
 #ifndef FISH_H_   
 #define FISH_H_
-#define ENERGY_F 20
-
+int ENERGY_F = 20;
 
 planer_c moveFish(Creature * creature,vector * fishes,vector * sharks);
 

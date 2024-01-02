@@ -125,7 +125,7 @@ bool is_free(planer_c c,vector * fishes,vector * sharks){
 }
 
 
-bool is_free_for_shark(planer_c c,vector * fishes,vector * sharks){
+bool is_free_for_shark(planer_c c ,vector * sharks){
 
   for (int i=0; i<sharks->size ; i++) {
     planer_c coord = sharks->data[i].coord;
