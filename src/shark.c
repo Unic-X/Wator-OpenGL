@@ -80,7 +80,7 @@ bool moveShark(Creature *shark,vector * fishes,vector * sharks){
     }
   }  
 
-  if (shark->energy>=15 && idx>0) { //Only Reproduce when no one nearby
+  if (shark->energy>=17 && idx>0) { //Only Reproduce when no one nearby
     reproduceShark(shark,sharks,next);
     return true;
   }
@@ -95,6 +95,7 @@ planer_c reproduceShark(Creature * shark, vector * sharks,planer_c next_coordina
   #ifdef DEBUG_ON
     printf("REPRODUCING\n\n");
   #endif /* ifdef DEBUG_ON */
+  
   Creature * daughter_shark= newShark(next_coordinate);
   shark->energy = ENERGY_S/2;
   daughter_shark->energy = ENERGY_S;

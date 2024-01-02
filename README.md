@@ -4,7 +4,7 @@
 
 This project implements a Wa-Tor simulation using C and OpenGL for visualization. Wa-Tor is a simulation of a predator (sharks) and prey (fish) ecosystem in a 2D grid.
 
-![Wa-Tor Simulation](images/wator.png)
+<img src="./images/wator.png"  width="300" height="300">
 
 ## Prerequisites
 

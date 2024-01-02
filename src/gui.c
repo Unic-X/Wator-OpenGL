@@ -9,7 +9,7 @@
 #ifndef GUI_H_
 #define GUI_H_
 
-unsigned long FPS = 10;
+unsigned long FPS = 1;
 
 vector * fishes;
 vector * sharks;

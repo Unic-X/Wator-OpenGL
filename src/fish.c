@@ -59,7 +59,7 @@ planer_c reproduceFish(Creature * fish, vector * fishes,planer_c next_coordinate
     printf("REPRODUCING\n\n");
   #endif /* ifdef DEBUG_ON */
   Creature * daughter_fish = new_fish(next_coordinate);
-  fish->energy = 0;
+  fish->energy = ENERGY_F/2;
   daughter_fish->energy = ENERGY_F/2;
   vec_add(fishes, *daughter_fish);
   return daughter_fish->coord;
