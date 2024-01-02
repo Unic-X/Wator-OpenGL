@@ -6,6 +6,12 @@
 
 #ifndef UTILS_H_
 #define UTILS_H_
+
+
+#define COLUMNS 40
+#define ROWS 40
+#define FPS 60
+
 typedef struct PlanerCoordinates{
   int x;
   int y;

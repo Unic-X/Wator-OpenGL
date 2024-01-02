@@ -1,11 +1,13 @@
 #include "fish.h"
 #include "utils.h"
-#include "gui.c"
+#include <GL/gl.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 /*
  *  Handles wrap around
  */
+
 void wrapCoordinates(planer_c *point) {
     // Wrap x-axis
     if (point->x < 0) {
@@ -59,7 +61,6 @@ planer_c moveFish(Creature *fish,vector * fishes,vector * sharks){
   if (is_free(north,fishes,sharks)) available[idx++] = north;
   if (is_free(south,fishes,sharks)) available[idx++] = south;
   planer_c next = available[rand()%idx];
-
   if (fish->energy>=ENERGY_F && idx>0) { 
     reproduceFish(fish,fishes,next);
     return fish->coord;
@@ -71,6 +72,10 @@ planer_c moveFish(Creature *fish,vector * fishes,vector * sharks){
 }
 
 planer_c reproduceFish(Creature * fish, vector * fishes,planer_c next_coordinate){
+
+  #ifdef DEBUG_ON
+    printf("REPRODUCING\n\n");
+  #endif /* ifdef DEBUG_ON */
   Creature * daughter_fish = new_fish(next_coordinate);
   daughter_fish->energy = 0;
   fish->energy = 0;
@@ -86,4 +91,9 @@ Creature * new_fish(planer_c coords){
   c->kin = Fish;
   c->energy = ENERGY_F; //Energy for fish => Reproducing energy some refer this as time instead
   return c;         
+}
+
+
+void drawFish(planer_c coords){
+  glRectd(coords.x, coords.y, coords.x+1, coords.y+1);
 }

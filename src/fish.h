@@ -7,7 +7,7 @@
 
 planer_c moveFish(Creature * creature,vector * fishes,vector * sharks);
 
-Creature * drawFish(int x,int y);
+void drawFish(planer_c coords);
 
 planer_c reproduceFish(Creature * creature,vector * fishes,planer_c next_coordinate);
 

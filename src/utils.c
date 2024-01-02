@@ -5,6 +5,8 @@
 #include <stdio.h>
 
 
+#define DEBUG_ON
+
 vector * new_vec(size_t init_cap){
   vector * v = (vector *)malloc(sizeof(vector));
   v->data = (Creature *)malloc(init_cap * sizeof(Creature));
@@ -12,9 +14,12 @@ vector * new_vec(size_t init_cap){
   v->size = 0;
   v->capacity = init_cap;
 
+
+  /***********DEBUGGING STUFF***********/
    #ifdef DEBUG_ON
     printf("V_ALLC: AT %p \n",v);
   #endif //DEBUG_ON
+ /************************************/
   
   return v; //Success
 
@@ -60,7 +65,11 @@ int vec_grow(vector * v,size_t capacity){
   /************************************/
 
   v->data = (Creature *)realloc(v->data,sizeof(Creature)*capacity);
+
+  #ifdef DEBUG_ON
   printf("MOVED TO %p\n",v->data);
+  #endif //DEBUG_ON
+  
   v->capacity = capacity;
 
   if (!v) return -1;

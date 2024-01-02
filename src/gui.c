@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/gl.h>
-#include <GL/glut.h>   // freeglut.h might be a better alternative, if available.
+#include "fish.c"
 
 #ifndef GUI_H_
 #define GUI_H_
 
-#define COLUMNS 100
-#define ROWS 100
-#define FPS 60
+vector * fishes;
+vector * sharks;
+
 
 void square(int x,int y,char R,char G,char B){
   glLineWidth(1.0);
@@ -37,6 +37,12 @@ void display() {  // Display function will draw the image. baiscally the main dr
     glClearColor( 0.3, 0.2, 0.3, 1 );  // (In fact, this is the default.)
     glClear( GL_COLOR_BUFFER_BIT );
     drawGrid();
+     glColor3ub(121,183,205);
+    for (size_t i = 0; i < fishes->size; i++) {
+      moveFish(&(fishes->data[i]), fishes, sharks);
+      drawFish(fishes->data[i].coord);
+    }
+    
     glutSwapBuffers(); 
  
 }
@@ -54,13 +60,22 @@ void timer_func(){ //For setting up FPS
   glutTimerFunc(1000/FPS,timer_func,0);
 }
 
-int main_loop( int argc, char** argv ) {  // Initialize GLUT and 
+int main_loop( int argc, char** argv) {  // Initialize GLUT and 
+    planer_c coord;
+    coord.x = 0;
+    coord.y = 1;
+    Creature * fish = new_fish(coord);
+    vector * fishe_ = new_vec(4);
+    vector * shark_ = new_vec(4);
+    fishes = fishe_;
+    sharks = shark_;
 
+    vec_add(fishes, *fish);
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE);    
     glutInitWindowSize(1024,1024);         // Size of display area, in pixels.
     glutCreateWindow("WatorGL"); // Parameter is window title.
-    glutDisplayFunc(display);            // Called when the window needs to be redrawn.
+    glutDisplayFunc(display); // Called when the window needs to be redrawn.
     glutReshapeFunc(reshape_callback); // In order to preserve the grid
     glutTimerFunc(0, timer_func,0);
     glutMainLoop(); // Run the event loop!  This function does not return.
