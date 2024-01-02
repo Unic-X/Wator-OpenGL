@@ -76,6 +76,25 @@ int vec_grow(vector * v,size_t capacity){
   return 0;  
 };
 
+
+
+void wrapCoordinates(planer_c *point) {
+    // Wrap x-axis
+    if (point->x < 0) {
+        point->x = COLUMNS - 1;
+    } else if (point->x >= COLUMNS) {
+        point->x = 0;
+    }
+
+    // Wrap y-axis
+    if (point->y < 0) {
+        point->y = ROWS - 1;
+    } else if (point->y >= ROWS) {
+        point->y = 0;
+    }
+}
+
+
 Creature vec_add(vector * v, Creature data)
 {
 
@@ -98,6 +117,18 @@ bool is_free(planer_c c,vector * fishes,vector * sharks){
     planer_c coord = fishes->data[i].coord;
     if( c.x == coord.x && c.y == coord.y) return false;
   }
+
+  for (int i=0; i<sharks->size ; i++) {
+    planer_c coord = sharks->data[i].coord;
+    if( c.x == coord.x && c.y == coord.y) return false;
+  }
+
+  return true;
+
+}
+
+
+bool is_free_for_shark(planer_c c,vector * fishes,vector * sharks){
 
   for (int i=0; i<sharks->size ; i++) {
     planer_c coord = sharks->data[i].coord;

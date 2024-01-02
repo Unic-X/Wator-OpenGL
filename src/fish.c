@@ -1,5 +1,4 @@
 #include "fish.h"
-#include "utils.h"
 #include <GL/gl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,22 +6,6 @@
 /*
  *  Handles wrap around
  */
-
-void wrapCoordinates(planer_c *point) {
-    // Wrap x-axis
-    if (point->x < 0) {
-        point->x = COLUMNS - 1;
-    } else if (point->x >= COLUMNS) {
-        point->x = 0;
-    }
-
-    // Wrap y-axis
-    if (point->y < 0) {
-        point->y = ROWS - 1;
-    } else if (point->y >= ROWS) {
-        point->y = 0;
-    }
-}
 
 
 planer_c moveFish(Creature *fish,vector * fishes,vector * sharks){
@@ -60,6 +43,11 @@ planer_c moveFish(Creature *fish,vector * fishes,vector * sharks){
   if (is_free(west,fishes,sharks)) available[idx++] = west;
   if (is_free(north,fishes,sharks)) available[idx++] = north;
   if (is_free(south,fishes,sharks)) available[idx++] = south;
+
+  if (idx==0) {
+    return fish->coord;
+  }
+
   planer_c next = available[rand()%idx];
   if (fish->energy>=ENERGY_F && idx>0) { 
     reproduceFish(fish,fishes,next);
@@ -67,7 +55,6 @@ planer_c moveFish(Creature *fish,vector * fishes,vector * sharks){
   }
 
   fish->coord = next;
-  return fish->coord;
 
 }
 
@@ -77,9 +64,8 @@ planer_c reproduceFish(Creature * fish, vector * fishes,planer_c next_coordinate
     printf("REPRODUCING\n\n");
   #endif /* ifdef DEBUG_ON */
   Creature * daughter_fish = new_fish(next_coordinate);
-  daughter_fish->energy = 0;
   fish->energy = 0;
-  daughter_fish->energy = 0;
+  daughter_fish->energy = ENERGY_F/2;
   vec_add(fishes, *daughter_fish);
   return daughter_fish->coord;
 }

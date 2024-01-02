@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <GL/gl.h>
 #include "fish.c"
+#include "shark.c"
 
 #ifndef GUI_H_
 #define GUI_H_
@@ -12,7 +13,7 @@ vector * sharks;
 
 
 void square(int x,int y,char R,char G,char B){
-  glLineWidth(1.0);
+  glLineWidth(0.1);
   glColor3ub(R,G,B);
   glBegin(GL_LINE_LOOP);
     glVertex2f(x,y);
@@ -37,10 +38,39 @@ void display() {  // Display function will draw the image. baiscally the main dr
     glClearColor( 0.3, 0.2, 0.3, 1 );  // (In fact, this is the default.)
     glClear( GL_COLOR_BUFFER_BIT );
     drawGrid();
-     glColor3ub(121,183,205);
+    
     for (size_t i = 0; i < fishes->size; i++) {
+       glColor3ub(121,183,205);
       moveFish(&(fishes->data[i]), fishes, sharks);
       drawFish(fishes->data[i].coord);
+      
+      float x = fishes->data[i].coord.x;
+      float y = fishes->data[i].coord.y;
+      glColor3ub(0.0 ,0.0 , 0.0);
+      glBegin(GL_LINE_LOOP);
+        glVertex2d(x, y);
+        glVertex2d(x+1, y);
+        glVertex2d(x+1, y+1);
+        glVertex2d(x, y+1);
+      glEnd(); 
+
+    }
+    //Draw Shark
+    for (size_t i = 0; i < sharks->size; i++) {
+      glColor3ub(255,139,97);
+      moveShark(&(sharks->data[i]), fishes, sharks);
+      drawShark(sharks->data[i].coord);
+      
+      float x = sharks->data[i].coord.x;
+      float y = sharks->data[i].coord.y;
+      glColor3ub(0.0 ,0.0 , 0.0);
+      glBegin(GL_LINE_LOOP);
+        glVertex2d(x, y);
+        glVertex2d(x+1, y);
+        glVertex2d(x+1, y+1);
+        glVertex2d(x, y+1);
+      glEnd(); 
+
     }
     
     glutSwapBuffers(); 
@@ -61,19 +91,26 @@ void timer_func(){ //For setting up FPS
 }
 
 int main_loop( int argc, char** argv) {  // Initialize GLUT and 
-    planer_c coord;
+    planer_c coord,coord2;
     coord.x = 0;
     coord.y = 1;
+
+    coord2.x = 3;
+    coord2.y = 1;
+
     Creature * fish = new_fish(coord);
+    Creature * shark = newShark(coord2);
+
     vector * fishe_ = new_vec(4);
     vector * shark_ = new_vec(4);
     fishes = fishe_;
     sharks = shark_;
 
     vec_add(fishes, *fish);
+    vec_add(sharks, *shark);
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE);    
-    glutInitWindowSize(1024,1024);         // Size of display area, in pixels.
+    glutInitWindowSize(900,900);         // Size of display area, in pixels.
     glutCreateWindow("WatorGL"); // Parameter is window title.
     glutDisplayFunc(display); // Called when the window needs to be redrawn.
     glutReshapeFunc(reshape_callback); // In order to preserve the grid

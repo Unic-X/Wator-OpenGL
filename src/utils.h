@@ -8,9 +8,9 @@
 #define UTILS_H_
 
 
-#define COLUMNS 40
-#define ROWS 40
-#define FPS 60
+#define COLUMNS 50
+#define ROWS 50
+#define FPS 20
 
 typedef struct PlanerCoordinates{
   int x;
@@ -52,6 +52,12 @@ int vec_grow(vector * v,size_t capacity);
 //Usage vec_add(vector,Creature)
 Creature vec_add(vector * v, Creature data);
 
+void vec_del(vector *v, int index) ;
+
 bool is_free(planer_c c,vector * fishes,vector * sharks);
+
+bool is_free_for_shark(planer_c c,vector * fishes,vector * sharks);
+
+void wrapCoordinates(planer_c *point);
 
 #endif // !UTILS_H_
