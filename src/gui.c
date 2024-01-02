@@ -123,8 +123,8 @@ void set_spawn_rate(unsigned char key,int _,int __){
 
 int main_loop( int argc, char** argv) {  // Initialize GLUT and 
     srand(time(0));
-    sharks = gen_sharks(10);
-    fishes = gen_fish(300);
+    sharks = gen_sharks(100);
+    fishes = gen_fish(3000);
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE);    
     glutInitWindowSize(900,900);         // Size of display area, in pixels.

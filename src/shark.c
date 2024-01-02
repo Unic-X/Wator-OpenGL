@@ -2,8 +2,6 @@
 #include "utils.h"
 #include <GL/gl.h>
 #include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 bool moveShark(Creature *shark,vector * fishes,vector * sharks){
   
@@ -56,16 +54,30 @@ bool moveShark(Creature *shark,vector * fishes,vector * sharks){
   }
 
   shark->energy--;
-  planer_c next = available[rand()%idx];
+  planer_c next = available[rand()%idx]; //Random Movements of shark only
+
+  bool found = false;  
+
+  for (size_t i =0; i<idx; i++) {
+    for (size_t j = 0; j < fishes->size; j++) {
+      if (fishes->data[j].coord.x == available[i].x &&
+          fishes->data[j].coord.y == available[i].y
+      ) {
+        next = available[i];
+        found = true;
+        break;
+      }
+    }
+  }
 
   for (size_t i = 0; i < fishes->size; i++) {
     if (fishes->data[i].coord.x == next.x &&
         fishes->data[i].coord.y == next.y 
     ) {
+      shark->energy+=5;
       vec_del(fishes, i); 
       break;
     }
-    
   }  
 
   if (shark->energy>=15 && idx>0) { //Only Reproduce when no one nearby
