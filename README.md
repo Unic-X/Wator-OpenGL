@@ -38,9 +38,17 @@ make
 ```
 
 ## Customization
+Keys used for customizing state variables: 
 
-TODO
+* `Arrow Up` : Increase FPS 
+
+* `Arrow Down`: Reduce FPS
+
+* `A/D` : Decrease/Increase Spawn Rate of Sharks
+
+* `S/W` : Decrease/Increase Spawn Rate of Sharks
+
 
 ## License
 
-This project is licensed under the [MIT License](https://spdx.org/licenses/MIT.html).
+This project is licensed under the [MIT License](https://spdx.org/licenses/MIT.html). Feel free to contribute.
