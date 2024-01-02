@@ -5,7 +5,6 @@
 #include <stdio.h>
 
 
-#define DEBUG_ON
 
 vector * new_vec(size_t init_cap){
   vector * v = (vector *)malloc(sizeof(vector));
@@ -122,9 +121,7 @@ bool is_free(planer_c c,vector * fishes,vector * sharks){
     planer_c coord = sharks->data[i].coord;
     if( c.x == coord.x && c.y == coord.y) return false;
   }
-
   return true;
-
 }
 
 

@@ -5,7 +5,7 @@
 #define ENERGY_S 10
 
 
-planer_c moveShark(Creature * creature,vector * fishes,vector * sharks);
+bool moveShark(Creature * creature,vector * fishes,vector * sharks);
 
 void drawShark(planer_c coords);
 

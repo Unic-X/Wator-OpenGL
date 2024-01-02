@@ -80,6 +80,22 @@ Creature * new_fish(planer_c coords){
 }
 
 
+vector * gen_fish(int number){
+  vector * generated_fishes = new_vec(number);
+  for (int i=0; i<number; i++) {
+    int x = rand() % COLUMNS;
+    int y = rand() % ROWS;
+    planer_c c;
+    c.x = x;c.y = y;
+    Creature * new_fis = new_fish(c);
+    vec_add(generated_fishes, *new_fis);
+
+  }
+
+  return generated_fishes;
+
+}
+
 void drawFish(planer_c coords){
   glRectd(coords.x, coords.y, coords.x+1, coords.y+1);
 }
