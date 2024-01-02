@@ -23,12 +23,12 @@ void wrapCoordinates(planer_c *point) {
 }
 
 
-planer_c moveFish(Creature *creature,vector * fishes,vector * sharks){
+planer_c moveFish(Creature *fish,vector * fishes,vector * sharks){
   //Energy of fish never deplets but  only when they Reproduce
   
-  creature->energy++; //Fish's Energy will always increase
+  fish->energy++; //Fish's Energy will always increase
 
-  planer_c * current_c = &(creature->coord);
+  planer_c * current_c = &(fish->coord);
 
   planer_c east,west,north,south; //Neighbour cells
 
@@ -58,17 +58,30 @@ planer_c moveFish(Creature *creature,vector * fishes,vector * sharks){
   if (is_free(west,fishes,sharks)) available[idx++] = west;
   if (is_free(north,fishes,sharks)) available[idx++] = north;
   if (is_free(south,fishes,sharks)) available[idx++] = south;
+  planer_c next = available[rand()%idx];
 
-  creature->coord = available[rand()%idx];
-  return creature->coord;
+  if (fish->energy>=ENERGY_F && idx>0) { 
+    reproduceFish(fish,fishes,next);
+    return fish->coord;
+  }
+
+  fish->coord = next;
+  return fish->coord;
 
 }
 
+planer_c reproduceFish(Creature * fish, vector * fishes,planer_c next_coordinate){
+  Creature * daughter_fish = new_fish(next_coordinate);
+  daughter_fish->energy = 0;
+  fish->energy = 0;
+  daughter_fish->energy = 0;
+  vec_add(fishes, *daughter_fish);
+  return daughter_fish->coord;
+}
 
-Creature * drawFish(int x,int y){
+
+Creature * new_fish(planer_c coords){
   Creature * c = malloc(sizeof(Creature));
-  planer_c coords;
-  coords.x = x, coords.y = y;
   c->coord = coords;
   c->kin = Fish;
   c->energy = ENERGY_F; //Energy for fish => Reproducing energy some refer this as time instead

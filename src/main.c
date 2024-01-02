@@ -25,13 +25,14 @@
 //    1. Takes nlogn for sorting
 //    2. Sorting makes logn search easier (Binary Search)
 //    3. Total search will take nlogn but since reproduction is lesser => lesser sorting
-//    nlogn calls and more logn search
+//    nlogn calls and more logn search?
 //
 //
 //
 // Rules for fish
 // P1. Prey fish move randomly to free neighboring cells
-// P2. Once the breed time is up a new fish spawns in a free neighboring cell and the parents breed time is reset.
+// P2. Once the breed time is up a new fish spawns in a free neighboring cell 
+// and the parents breed time is reset.
 //
 //
 // Rules for Sharks(Preadtor)
@@ -41,17 +42,21 @@
 // P4. Sharks lose a small fixed ammount of energy with every time step.
 // P5. A shark dies if its energy level drops to zero.
 
+
 int main(int argc, char** argv )
 { 
-  Creature * fish = drawFish(1, 2);
+  planer_c coord;
+  coord.x = 0;
+  coord.y = 1;
+  Creature * fish = new_fish(coord);
   vector * fishes = new_vec(4);
   vec_add(fishes, *fish);
   vector * sharks = new_vec(4);
-
   while (1) {
     planer_c next_move = moveFish(fish, fishes, sharks);
     printf("%d %d\n",fish->coord.x,fish->coord.y);
-    usleep(10);
+    printf("Current Fishes: %lu \n",fishes->size);
+    usleep(1000);
   }
 }
 
