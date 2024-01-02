@@ -58,7 +58,7 @@ void display() {  // Display function will draw the image. baiscally the main dr
     }
 
     //Draw Shark
-    for (size_t i = 0; i < sharks->size; i++) {
+    for (size_t i = 0; i < sharks->size; ++i) {
       glColor3ub(255,139,97);
       moveShark(&(sharks->data[i]), fishes, sharks);
 

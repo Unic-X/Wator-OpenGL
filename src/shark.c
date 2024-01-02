@@ -8,14 +8,16 @@
 bool moveShark(Creature *shark,vector * fishes,vector * sharks){
   
   shark->energy--; //Shark's Energy will always decrease
+  
   printf("%d\n",shark->energy);
-  if (shark->energy<=0) {
+
+  if (shark->energy==0) {
     for (size_t i = 0; i < sharks->size; i++) {
-      if (sharks->data[i].energy <= 0) {
+      if (sharks->data[i].energy == 0) {
         vec_del(sharks, i);
       }
     }
- return false;
+    return false;
 
   } 
 
