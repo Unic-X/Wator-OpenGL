@@ -42,7 +42,23 @@
 
 int main(int argc, char** argv )
 { 
-  main_loop(argc,argv);
+    planer_c coord;
+    coord.x = 0;
+    coord.y = 1;
+    Creature * fish = new_fish(coord);
+    vector * fishes = new_vec(4);
+    vector * sharks = new_vec(4);
+    
+
+    vec_add(fishes, *fish);
+  int i = 0;
+  while (i<1000) {
+    for (size_t i = 0; i < fishes->size; i++) {
+      moveFish(&(fishes->data[i]), fishes, sharks);
+      drawFish(fishes->data[i].coord);
+    }
+  }
+
 }
 
 
