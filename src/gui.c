@@ -9,7 +9,7 @@
 #ifndef GUI_H_
 #define GUI_H_
 
-unsigned long FPS = 1;
+unsigned long FPS = 30;
 
 vector * fishes;
 vector * sharks;
@@ -49,7 +49,14 @@ void draw_border(int x,int y){
 }
 
 void display() {  // Display function will draw the image. baiscally the main drawing loop
- 
+    
+    #ifndef DEBUG_ON
+    
+      printf("CURRENT FISHES %lu\n",fishes->size);
+      printf("CURRENT SHARK %lu\n",sharks->size);
+  
+    #endif /* ifndef DEBUG_ON */
+
     glClearColor( 0.3, 0.2, 0.3, 1 );  // (In fact, this is the default.)
     glClear( GL_COLOR_BUFFER_BIT );
     drawGrid();
@@ -68,7 +75,7 @@ void display() {  // Display function will draw the image. baiscally the main dr
     for (size_t i = 0; i < sharks->size; ++i) {
       glColor3ub(255,139,97);
       if(!moveShark(&(sharks->data[i]), fishes, sharks)){
-        i--;
+        --i;
       };
       drawShark(sharks->data[i].coord);
       float x = sharks->data[i].coord.x;
@@ -100,7 +107,7 @@ void keyboard_callback(int key,int _,int __){
       break;
     case GLUT_KEY_DOWN:
       if (FPS==1) break;
-      FPS--;
+        FPS--;
       break;
   }
 }
@@ -109,15 +116,15 @@ void set_spawn_rate(unsigned char key,int _,int __){
   switch (key) {
     case 'a':
       if (ENERGY_F==0) break;
-      ENERGY_F--;
+        ENERGY_F--;
     case 'd':
       ENERGY_F++;
     case 'w':
       ENERGY_S++;
     case 's':
       if (ENERGY_S==0) break;
-      ENERGY_S--;
-
+        ENERGY_S--;
+    
   }
 }
 

@@ -2,8 +2,9 @@
 
 #ifndef SHARK_H_   
 #define SHARK_H_
-int ENERGY_S = 7;
+#define BREEDING_T_S 12
 
+int ENERGY_S = 4;
 
 bool moveShark(Creature * creature,vector * fishes,vector * sharks);
 

@@ -2,6 +2,8 @@
 
 #ifndef FISH_H_   
 #define FISH_H_
+#define BREEDING_T_F 2 
+
 int ENERGY_F = 10;
 
 planer_c moveFish(Creature * creature,vector * fishes,vector * sharks);

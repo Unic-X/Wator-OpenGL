@@ -7,8 +7,8 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
-#define COLUMNS 40
-#define ROWS 40
+#define COLUMNS 60
+#define ROWS 60
 
 typedef struct PlanerCoordinates{
   int x;
@@ -24,6 +24,7 @@ typedef struct Creature{
   kind kin;
   planer_c coord;
   int energy;
+  unsigned long breeding_time;
 } Creature;
 
 
