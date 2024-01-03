@@ -18,7 +18,6 @@ bool moveShark(Creature *shark,vector * fishes,vector * sharks){
       ) {
         vec_del(sharks, i);
 
-        printf("ENERGY BECAME 0 for %lu\n", t - sharks->size);
       }
     }
     return false; //Cannot move starved shark

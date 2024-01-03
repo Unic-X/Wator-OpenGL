@@ -114,14 +114,14 @@ void keyboard_callback(int key,int _,int __){
 
 void set_spawn_rate(unsigned char key,int _,int __){
   switch (key) {
-    case 'a':
+    case 'a' | 'A':
       if (ENERGY_F==0) break;
         ENERGY_F--;
-    case 'd':
+    case 'd' | 'D':
       ENERGY_F++;
-    case 'w':
+    case 'w' | 'W':
       ENERGY_S++;
-    case 's':
+    case 's' | 'S':
       if (ENERGY_S==0) break;
         ENERGY_S--;
     
