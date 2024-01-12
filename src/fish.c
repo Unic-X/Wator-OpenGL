@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-planer_c moveFish(Creature *fish,vector * fishes,vector * sharks){
+int ENERGY_F = 10;
+
+void moveFish(Creature *fish,vector * fishes,vector * sharks){
   //Energy of fish never deplets but  only when they Reproduce
   
   fish->energy++; //Fish's Energy will always increase
@@ -41,13 +43,13 @@ planer_c moveFish(Creature *fish,vector * fishes,vector * sharks){
   if (is_free(south,fishes,sharks)) available[idx++] = south;
 
   if (idx==0) {
-    return fish->coord;
+    return;
   }
 
   planer_c next = available[rand()%idx];
   if (fish->breeding_time>=BREEDING_T_F && idx>0) { 
     reproduceFish(fish,fishes,next);
-    return fish->coord;
+    return;
   }
 
   fish->coord = next;
@@ -77,12 +79,14 @@ Creature * new_fish(planer_c coords){
   return c;         
 }
 
-
 vector * gen_fish(int number){
-  vector * generated_fishes = new_vec(number);
+  vector * generated_fishes = new_vec(256);
   for (int i=0; i<number; i++) {
-    int x = rand() % COLUMNS;
-    int y = rand() % ROWS;
+    int x,y;
+    do {
+      x = rand() % COLUMNS; 
+      y = rand() % ROWS; 
+    } while (isCoordinateTaken(generated_fishes,i, x, y));
     planer_c c;
     c.x = x;c.y = y;
     Creature * new_fis = new_fish(c);
@@ -94,6 +98,6 @@ vector * gen_fish(int number){
 
 }
 
-void drawFish(planer_c coords){
+static inline void drawFish(planer_c coords){
   glRectd(coords.x, coords.y, coords.x+1, coords.y+1);
 }

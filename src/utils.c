@@ -135,3 +135,13 @@ bool is_free_for_shark(planer_c c ,vector * sharks){
   return true;
 
 }
+
+
+int isCoordinateTaken(vector * creatures, int n, int x, int y){
+    for (int i = 0; i < creatures->size; i++) {
+        if (creatures->data[i].coord.x == x && creatures->data[i].coord.y == y) {
+            return true; 
+        }
+    }
+    return false; 
+}

@@ -7,8 +7,8 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
-#define COLUMNS 80
-#define ROWS 80
+#define COLUMNS 100
+#define ROWS 100
 
 typedef struct PlanerCoordinates{
   int x;
@@ -58,5 +58,10 @@ bool is_free(planer_c c,vector * fishes,vector * sharks);
 bool is_free_for_shark(planer_c c,vector * sharks);
 
 void wrapCoordinates(planer_c *point);
+
+
+
+int isCoordinateTaken(vector * creatures, int n, int x, int y);
+
 
 #endif // !UTILS_H_

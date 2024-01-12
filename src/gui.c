@@ -1,18 +1,43 @@
 #include <GL/freeglut_std.h>
+#include <bits/time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/gl.h>
-#include <time.h>
+#include <pthread.h>
 #include "fish.c"
 #include "shark.c"
 
 #ifndef GUI_H_
 #define GUI_H_
 
-unsigned long FPS = 30;
+unsigned long FPS = 5;
 
 vector * fishes;
 vector * sharks;
+
+pthread_t fishes_;
+
+uint32_t gettickcount()
+{
+  struct timespec ts;
+
+  clock_gettime(CLOCK_MONOTONIC_COARSE, &ts);
+  return (1000 * ts.tv_sec + ts.tv_nsec / 1000000);
+}
+
+void fps()
+{    
+    static float framesPerSecond    = 0.0f;       // This will store our fps
+    static float lastTime   = 0.0f;       // This will hold the time from the last frame
+    float currentTime = gettickcount() * 0.001f;    
+    ++framesPerSecond;
+    if( currentTime - lastTime > 1.0f )
+    {
+        lastTime = currentTime;
+        fprintf(stderr, "FPS:%d\n", (int)framesPerSecond);
+        framesPerSecond = 0;
+    }
+}
 
 
 void square(int x,int y,char R,char G,char B){
@@ -50,7 +75,7 @@ void draw_border(int x,int y){
 
 void display() {  // Display function will draw the image. baiscally the main drawing loop
     
-    #ifndef DEBUG_ON
+    #ifdef DEBUG_ON
     
       printf("CURRENT FISHES %lu\n",fishes->size);
       printf("CURRENT SHARK %lu\n",sharks->size);
@@ -84,6 +109,7 @@ void display() {  // Display function will draw the image. baiscally the main dr
     }
     
     glutSwapBuffers(); 
+    fps();
  
 }
 
@@ -91,7 +117,7 @@ void reshape_callback(int width,int height){
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(0.0, COLUMNS, 0.0, COLUMNS, -1.0, 1.0);
+  glOrtho(0.0, ROWS, COLUMNS, 0.0, -1.0, 1.0);
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -117,21 +143,28 @@ void set_spawn_rate(unsigned char key,int _,int __){
     case 'a' | 'A':
       if (ENERGY_F==0) break;
         ENERGY_F--;
+        break;
     case 'd' | 'D':
       ENERGY_F++;
+      break;
     case 'w' | 'W':
       ENERGY_S++;
+      break;
     case 's' | 'S':
       if (ENERGY_S==0) break;
         ENERGY_S--;
-    
+        break;
+
   }
 }
 
 int main_loop( int argc, char** argv) {  // Initialize GLUT and 
-    srand(time(0));
-    sharks = gen_sharks(100);
-    fishes = gen_fish(3000);
+   
+
+    srand(time(NULL));   //Get random seed everytime" 
+    sharks = gen_sharks(10);
+    fishes = gen_fish(300);   
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE);    
     glutInitWindowSize(900,900);         // Size of display area, in pixels.

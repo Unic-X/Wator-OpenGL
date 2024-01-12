@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <time.h>
 
+int ENERGY_S = 4;
+
 bool moveShark(Creature *shark,vector * fishes,vector * sharks){
   
  //Shark's Energy will always decrease
@@ -67,17 +69,17 @@ bool moveShark(Creature *shark,vector * fishes,vector * sharks){
   
 
   //Check if nearby any fish if yes move there else don't
-  // for (size_t i =0; i<idx; i++) { 
-  //   for (size_t j = 0; j < fishes->size; j++) {
-  //     if (fishes->data[j].coord.x == available[i].x &&
-  //         fishes->data[j].coord.y == available[i].y
-  //     ) {
-  //       next = available[i];
-  //       found = true;
-  //     }
-  //   }
-  // }
-  //  
+  for (size_t i =0; i<idx; i++) { 
+    for (size_t j = 0; j < fishes->size; j++) {
+      if (fishes->data[j].coord.x == available[i].x &&
+          fishes->data[j].coord.y == available[i].y
+      ) {
+        next = available[i];
+        found = true;
+      }
+    }
+  }
+   
   //Check if moved onto a fish and delete the fish from fishes vector
   for (size_t i = 0; i < fishes->size; i++) {
     if (fishes->data[i].coord.x == next.x &&
@@ -89,7 +91,6 @@ bool moveShark(Creature *shark,vector * fishes,vector * sharks){
     }
   }  
 
-  //Reproduce when Energy >= 17 and when there are places to go to
   if (shark->breeding_time>=BREEDING_T_S && idx!=0) { //Only Reproduce when no one nearby
     reproduceShark(shark,sharks,next);
     return true;
@@ -123,20 +124,25 @@ Creature * newShark(planer_c coords){
 }
 
 
-vector * gen_sharks(unsigned long number){
+vector * gen_sharks(int number){
   vector * generated_sharks = new_vec(256);
   for (int i=0; i<number; i++) {
-    int x = rand() % COLUMNS;
-    int y = rand() % ROWS;
+    int x,y;
+    do {
+      x = rand() % COLUMNS; 
+      y = rand() % ROWS; 
+    } while (isCoordinateTaken(generated_sharks,i, x, y));
     planer_c c;
     c.x = x;c.y = y;
     Creature * new_shark = newShark(c);
     vec_add(generated_sharks, *new_shark);
+
   }
+
   return generated_sharks;
 
 }
 
-void drawShark(planer_c coords){
+static inline void drawShark(planer_c coords){
   glRectd(coords.x, coords.y, coords.x+1, coords.y+1);
 }
