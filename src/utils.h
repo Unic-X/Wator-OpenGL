@@ -7,8 +7,11 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
-#define COLUMNS 100
-#define ROWS 100
+#define COLUMNS 60
+#define ROWS 60
+
+
+
 
 typedef struct PlanerCoordinates{
   int x;

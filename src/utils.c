@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 
+pthread_mutex_t mutex;
 
 vector * new_vec(size_t init_cap){
   vector * v = (vector *)malloc(sizeof(vector));

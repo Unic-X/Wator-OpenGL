@@ -1,4 +1,3 @@
-
 #include "gui.c"
 #include "utils.c"
 #include <stdio.h>
@@ -18,8 +17,8 @@
 // 0. Define a Vector                                   -- Done
 // 1. Define for Generic Type                           -- Done(Defined for Creature Instead)
 // 2. Represneting Toroidal Geometry in plane           -- Done
-// 3. Simulating Prey/ Preadtor behaviour via rules    
-// 4. Impl Quick Sort for the coordinates because : 
+// 3. Simulating Prey/ Preadtor behaviour via rules     -- Done  
+// 4. Impl Quick Sort for the coordinates because :    
 //    1. Takes nlogn for sorting
 //    2. Sorting makes logn search easier (Binary Search)
 
@@ -43,7 +42,6 @@
 
 int main(int argc, char** argv )
 { 
-
   main_loop(argc,argv);
 }
 

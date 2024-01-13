@@ -3,13 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int ENERGY_F = 10;
 
 void moveFish(Creature *fish,vector * fishes,vector * sharks){
   //Energy of fish never deplets but  only when they Reproduce
   
   fish->energy++; //Fish's Energy will always increase
-  
   fish->breeding_time++;
   planer_c * current_c = &(fish->coord);
 
@@ -93,11 +91,11 @@ vector * gen_fish(int number){
     vec_add(generated_fishes, *new_fis);
 
   }
-
+  
   return generated_fishes;
 
 }
 
-static inline void drawFish(planer_c coords){
+void drawFish(planer_c coords){
   glRectd(coords.x, coords.y, coords.x+1, coords.y+1);
 }

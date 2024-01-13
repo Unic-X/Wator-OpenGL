@@ -1,4 +1,4 @@
-CFLAGS = -std=c11 -Wall -Wextra -pthreads
+CFLAGS = -std=c11 -Wall -Wextra 
 
 all:
-	$(CC) $(CCFLAGS) -g -o main src/main.c -lGL -lglut
+	$(CC) $(CCFLAGS) -g -o main src/main.c -lGL -lglut -lpthread

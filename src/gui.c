@@ -10,12 +10,10 @@
 #ifndef GUI_H_
 #define GUI_H_
 
-unsigned long FPS = 5;
+unsigned long FPS = 30;
 
 vector * fishes;
 vector * sharks;
-
-pthread_t fishes_;
 
 uint32_t gettickcount()
 {
@@ -69,8 +67,44 @@ void draw_border(int x,int y){
     glVertex2d(x, y+1);
   glEnd(); 
 
+}
 
+static inline void drawFishes(){
+ for (size_t i = 0; i < fishes->size; i++) {
+      glColor3ub(121,183,205);
+      drawFish(fishes->data[i].coord);
+      float x = fishes->data[i].coord.x;
+      float y = fishes->data[i].coord.y;
+      draw_border(x, y); 
+    }
+}
 
+void* moveFishesThread() {
+    for (size_t i = 0; i < fishes->size; i++) {
+        moveFish(&(fishes->data[i]), fishes, sharks);
+    }
+    return NULL;
+}
+
+void* moveSharksThread() {
+    for (size_t i = 0; i < sharks->size; i++) {
+      if(!moveShark(&(sharks->data[i]), fishes, sharks)){
+        --i;
+      };
+    }
+    return NULL;
+}
+
+static inline void drawSharks(){
+
+ for (size_t i = 0; i < sharks->size; ++i) {
+      glColor3ub(255,139,97);
+     
+      drawShark(sharks->data[i].coord);
+      float x = sharks->data[i].coord.x;
+      float y = sharks->data[i].coord.y;
+      draw_border(x, y);
+    }
 }
 
 void display() {  // Display function will draw the image. baiscally the main drawing loop
@@ -81,33 +115,26 @@ void display() {  // Display function will draw the image. baiscally the main dr
       printf("CURRENT SHARK %lu\n",sharks->size);
   
     #endif /* ifndef DEBUG_ON */
-
+    
+    pthread_t fishes_t,sharks_t;
+  
     glClearColor( 0.3, 0.2, 0.3, 1 );  // (In fact, this is the default.)
     glClear( GL_COLOR_BUFFER_BIT );
     drawGrid();
-
     //Draw Fish
-    for (size_t i = 0; i < fishes->size; i++) {
-      glColor3ub(121,183,205);
-      moveFish(&(fishes->data[i]), fishes, sharks);
-      drawFish(fishes->data[i].coord);
-      float x = fishes->data[i].coord.x;
-      float y = fishes->data[i].coord.y;
-      draw_border(x, y); 
-    }
-
-    //Draw Shark
-    for (size_t i = 0; i < sharks->size; ++i) {
-      glColor3ub(255,139,97);
-      if(!moveShark(&(sharks->data[i]), fishes, sharks)){
-        --i;
-      };
-      drawShark(sharks->data[i].coord);
-      float x = sharks->data[i].coord.x;
-      float y = sharks->data[i].coord.y;
-      draw_border(x, y);
-    }
     
+    pthread_create(&fishes_t, NULL, moveFishesThread, NULL);
+    pthread_create(&sharks_t, NULL, moveSharksThread, NULL);
+
+    
+    pthread_join(fishes_t, NULL);
+    pthread_join(sharks_t, NULL);
+
+    drawFishes();
+    //Draw Shark
+   
+    drawSharks();
+
     glutSwapBuffers(); 
     fps();
  
@@ -164,7 +191,7 @@ int main_loop( int argc, char** argv) {  // Initialize GLUT and
     srand(time(NULL));   //Get random seed everytime" 
     sharks = gen_sharks(10);
     fishes = gen_fish(300);   
-
+    
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE);    
     glutInitWindowSize(900,900);         // Size of display area, in pixels.
@@ -175,8 +202,11 @@ int main_loop( int argc, char** argv) {  // Initialize GLUT and
     glutSpecialFunc(keyboard_callback);
     glutKeyboardFunc(set_spawn_rate);
     glutMainLoop(); // Run the event loop!  This function does not return.
+  
+    free_vec(sharks);
+    free_vec(fishes);
     return 0;
 }
 
 
-#endif /* ifndef GUI_H_ */
+#endif /* if def !GUI_H_ */

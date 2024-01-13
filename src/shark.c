@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <time.h>
 
-int ENERGY_S = 4;
 
 bool moveShark(Creature *shark,vector * fishes,vector * sharks){
   
@@ -143,6 +142,6 @@ vector * gen_sharks(int number){
 
 }
 
-static inline void drawShark(planer_c coords){
+void drawShark(planer_c coords){
   glRectd(coords.x, coords.y, coords.x+1, coords.y+1);
 }
