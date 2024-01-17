@@ -2,7 +2,7 @@
 
 #ifndef _FISH_H_   
 #define _FISH_H_
-#define BREEDING_T_F 1 
+#define BREEDING_T_F 1
 
 int ENERGY_F = 10;
 

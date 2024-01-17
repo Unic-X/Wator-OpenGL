@@ -68,16 +68,16 @@ bool moveShark(Creature *shark,vector * fishes,vector * sharks){
   
 
   //Check if nearby any fish if yes move there else don't
-  for (size_t i =0; i<idx; i++) { 
-    for (size_t j = 0; j < fishes->size; j++) {
-      if (fishes->data[j].coord.x == available[i].x &&
-          fishes->data[j].coord.y == available[i].y
-      ) {
-        next = available[i];
-        found = true;
-      }
-    }
-  }
+ //  for (size_t i =0; i<idx; i++) { 
+ //    for (size_t j = 0; j < fishes->size; j++) {
+ //      if (fishes->data[j].coord.x == available[i].x &&
+ //          fishes->data[j].coord.y == available[i].y
+ //      ) {
+ //        next = available[i];
+ //        found = true;
+ //      }
+ //    }
+ // }
    
   //Check if moved onto a fish and delete the fish from fishes vector
   for (size_t i = 0; i < fishes->size; i++) {

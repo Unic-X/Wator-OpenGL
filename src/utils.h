@@ -10,9 +10,6 @@
 #define COLUMNS 60
 #define ROWS 60
 
-
-
-
 typedef struct PlanerCoordinates{
   int x;
   int y;
@@ -22,6 +19,19 @@ typedef enum kind{
   Fish,
   Shark
 }kind;
+
+typedef struct NODE{
+    kind k;
+    int i;
+    struct NODE *link; 
+} NODE;
+
+
+typedef struct{
+    NODE *head;
+    NODE *rear;
+    int num_nodes;
+} threadqueue;
 
 typedef struct Creature{
   kind kin;

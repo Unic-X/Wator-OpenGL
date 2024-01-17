@@ -1,9 +1,11 @@
 #include <GL/freeglut_std.h>
+#include <bits/pthreadtypes.h>
 #include <bits/time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/gl.h>
 #include <pthread.h>
+#include <time.h>
 #include "fish.c"
 #include "shark.c"
 
@@ -14,6 +16,9 @@ unsigned long FPS = 30;
 
 vector * fishes;
 vector * sharks;
+
+
+pthread_t fishes_t,sharks_t;
 
 uint32_t gettickcount()
 {
@@ -80,18 +85,25 @@ static inline void drawFishes(){
 }
 
 void* moveFishesThread() {
-    for (size_t i = 0; i < fishes->size; i++) {
-        moveFish(&(fishes->data[i]), fishes, sharks);
-    }
+
+    struct timeval t1, t2;
+  
     return NULL;
 }
 
 void* moveSharksThread() {
+
+
+
+    int now = time(NULL); 
     for (size_t i = 0; i < sharks->size; i++) {
       if(!moveShark(&(sharks->data[i]), fishes, sharks)){
         --i;
       };
     }
+
+
+    printf("%lu \n",time(NULL)-now);
     return NULL;
 }
 
@@ -116,19 +128,21 @@ void display() {  // Display function will draw the image. baiscally the main dr
   
     #endif /* ifndef DEBUG_ON */
     
-    pthread_t fishes_t,sharks_t;
   
     glClearColor( 0.3, 0.2, 0.3, 1 );  // (In fact, this is the default.)
     glClear( GL_COLOR_BUFFER_BIT );
     drawGrid();
     //Draw Fish
     
-    pthread_create(&fishes_t, NULL, moveFishesThread, NULL);
-    pthread_create(&sharks_t, NULL, moveSharksThread, NULL);
-
+    for (size_t i = 0; i < sharks->size; i++) {
+      if(!moveShark(&(sharks->data[i]), fishes, sharks)){
+        --i;
+      };
+    }
+    for (size_t i = 0; i < fishes->size; i++) {
+        moveFish(&(fishes->data[i]), fishes, sharks);
+    }
     
-    pthread_join(fishes_t, NULL);
-    pthread_join(sharks_t, NULL);
 
     drawFishes();
     //Draw Shark
@@ -136,7 +150,6 @@ void display() {  // Display function will draw the image. baiscally the main dr
     drawSharks();
 
     glutSwapBuffers(); 
-    fps();
  
 }
 
@@ -185,12 +198,24 @@ void set_spawn_rate(unsigned char key,int _,int __){
   }
 }
 
+void* t_handler(void*){
+    while(true){
+
+    }
+}
+
 int main_loop( int argc, char** argv) {  // Initialize GLUT and 
    
 
     srand(time(NULL));   //Get random seed everytime" 
     sharks = gen_sharks(10);
-    fishes = gen_fish(300);   
+    fishes = gen_fish(300);
+
+    pthread_t t1, t2, t3, t4;
+    pthread_create(&t1, NULL, t_handler, NULL);
+    pthread_create(&t2, NULL, t_handler, NULL);
+    pthread_create(&t3, NULL, t_handler, NULL);
+    pthread_create(&t4, NULL, t_handler, NULL);
     
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE);    

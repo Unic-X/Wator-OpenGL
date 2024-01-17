@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <stddef.h>
 #include <stdio.h>
-
+threadqueue * QUEUE;
 
 pthread_mutex_t mutex;
 
@@ -24,6 +24,46 @@ vector * new_vec(size_t init_cap){
   return v; //Success
 
 }
+
+
+NODE* get_node(int i,kind k){
+    NODE * temp = (NODE *)malloc(sizeof(NODE));
+    temp->k = k;
+    temp->i = i;
+    temp->link = NULL;
+    return temp;
+}
+
+void enqueue(int i, kind k){
+
+    NODE *temp = get_node(i,k);
+    if(QUEUE->num_nodes == 0){
+        QUEUE->head = temp;
+        QUEUE->rear = temp;
+    }else{
+        QUEUE->rear->link = temp;
+        QUEUE->rear = temp;
+    }
+    QUEUE->num_nodes++;
+}
+
+NODE* dequeue(){
+    if(QUEUE->num_nodes == 0){
+        return NULL;
+    }
+    else{
+        NODE *temp = QUEUE->head;
+        QUEUE->head = QUEUE->head->link;
+        QUEUE->num_nodes--;
+
+        if(QUEUE->num_nodes == 0){
+            QUEUE->head = NULL;
+            QUEUE->rear = NULL;
+        }
+        return temp;
+    }
+}
+
 
 void vector_set(vector * v,int index, Creature c){
   if (index>=0 && index<v->size) v->data[index]=c; 

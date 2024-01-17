@@ -7,7 +7,6 @@
 void moveFish(Creature *fish,vector * fishes,vector * sharks){
   //Energy of fish never deplets but  only when they Reproduce
   
-  fish->energy++; //Fish's Energy will always increase
   fish->breeding_time++;
   planer_c * current_c = &(fish->coord);
 

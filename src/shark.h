@@ -1,6 +1,6 @@
 #include "utils.h"
 
-int ENERGY_S = 4;
+int ENERGY_S = 5;
 
 
 #ifndef SHARK_H_   
