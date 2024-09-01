@@ -1,5 +1,4 @@
 #include <GL/freeglut_std.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <GL/gl.h>
 #include <time.h>
@@ -9,11 +8,13 @@
 #ifndef GUI_H_
 #define GUI_H_
 
-unsigned long FPS = 30;
+unsigned long FPS = 60;
 
 vector * fishes;
 vector * sharks;
 
+Creature ***sea;
+int old = 0;
 
 void square(int x,int y,char R,char G,char B){
   glLineWidth(0.1);
@@ -28,8 +29,8 @@ void square(int x,int y,char R,char G,char B){
 
 
 void drawGrid(){
-  for (int x=0; x<COLUMNS; x++) {
-    for (int y = 0; y < ROWS; y++) {
+  for (int x=0; x<SIZE; x++) {
+    for (int y = 0; y < SIZE; y++) {
       square(x,y,(char)255,(char)255,(char)255);
     }
   }
@@ -43,55 +44,91 @@ void draw_border(int x,int y){
     glVertex2d(x+1, y+1);
     glVertex2d(x, y+1);
   glEnd(); 
+}
 
+void copy(Creature ***sea, int x, int y, int i, int j){
+    int new = old^1;
+    sea[new][x][y].energy = sea[old][i][j].energy;
+    sea[new][x][y].breeding_time = sea[old][i][j].breeding_time;
+}
 
+void block(int x, int y){
+    sea[old][x][y].kin = Blocked;
+}
 
+void draw(){
+  // can be multi-threaded
+  for(int i = 0; i < SIZE; i++){
+    for(int j = 0; j < SIZE; j++){
+      if(sea[old][i][j].kin == Shark){
+        glColor3ub(255,139,97);
+        glRectd(i,j,i+1,j+1);
+      }
+      else if(sea[old][i][j].kin == Fish){
+        glColor3ub(121,183,205);
+        glRectd(i,j,i+1,j+1);
+      }
+      draw_border(i, j);
+    }
+  }
+}
+
+void reset(){
+  draw();
+
+  #ifdef DEBUG_ON
+  #include <stdio.h>
+  int nShark = 0;
+  int nFish = 0;
+  for(int i = 0; i < SIZE; i++){
+    for(int j = 0; j < SIZE; j++){
+      if(sea[old][i][j].kin == Shark){
+        nShark++;
+      }
+      else if(sea[old][i][j].kin == Fish){
+        nFish++;
+      }
+    }
+  }
+  printf("nShark %d, nFish %d\n", nShark, nFish);
+  #endif /* ifndef DEBUG_ON */
+
+  int new = old^1;
+  for(int i = 0; i < SIZE; i++){
+    for(int j = 0; j < SIZE; j++){
+      sea[new][i][j].kin = Water;
+    }
+  }
+
+  for(int i = 0; i < SIZE; i++){
+    for(int j = 0; j < SIZE; j++){
+      if(sea[old][i][j].kin == Shark){
+        moveShark(sea, old, i, j);
+      }
+      else if(sea[old][i][j].kin == Fish){
+        moveFish(sea, old, i, j);
+      }
+    }
+  }
+  old ^= 1;
 }
 
 void display() {  // Display function will draw the image. baiscally the main drawing loop
-    
-    #ifndef DEBUG_ON
-    
-      printf("CURRENT FISHES %lu\n",fishes->size);
-      printf("CURRENT SHARK %lu\n",sharks->size);
+
+  glClearColor( 1, 1, 1, 1 );  // (In fact, this is the default.)
+  glClear( GL_COLOR_BUFFER_BIT );
+  drawGrid();
+
+  reset(); // reset the sea, swap the matrix
   
-    #endif /* ifndef DEBUG_ON */
-
-    glClearColor( 0.3, 0.2, 0.3, 1 );  // (In fact, this is the default.)
-    glClear( GL_COLOR_BUFFER_BIT );
-    drawGrid();
-
-    //Draw Fish
-    for (size_t i = 0; i < fishes->size; i++) {
-      glColor3ub(121,183,205);
-      moveFish(&(fishes->data[i]), fishes, sharks);
-      drawFish(fishes->data[i].coord);
-      float x = fishes->data[i].coord.x;
-      float y = fishes->data[i].coord.y;
-      draw_border(x, y); 
-    }
-
-    //Draw Shark
-    for (size_t i = 0; i < sharks->size; ++i) {
-      glColor3ub(255,139,97);
-      if(!moveShark(&(sharks->data[i]), fishes, sharks)){
-        --i;
-      };
-      drawShark(sharks->data[i].coord);
-      float x = sharks->data[i].coord.x;
-      float y = sharks->data[i].coord.y;
-      draw_border(x, y);
-    }
-    
-    glutSwapBuffers(); 
- 
+  glutSwapBuffers(); 
 }
 
 void reshape_callback(int width,int height){
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(0.0, COLUMNS, 0.0, COLUMNS, -1.0, 1.0);
+  glOrtho(0.0, SIZE, 0.0, SIZE, -1.0, 1.0);
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -128,21 +165,41 @@ void set_spawn_rate(unsigned char key,int _,int __){
   }
 }
 
+void initSea(){
+  sea = (Creature ***)malloc(2 * sizeof(int **));
+  for (int i = 0; i < 2; i++) {
+    sea[i] = (Creature **)malloc(SIZE * sizeof(Creature *));
+    for (int j = 0; j < SIZE; j++) {
+      sea[i][j] = (Creature *)malloc(SIZE * sizeof(Creature));
+    }
+  }
+  
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      for (int k = 0; k < SIZE; k++) {
+        sea[i][j][k].kin = Water;
+      }
+    }
+  }
+}
+
 int main_loop( int argc, char** argv) {  // Initialize GLUT and 
-    srand(time(0));
-    sharks = gen_sharks(100);
-    fishes = gen_fish(3000);
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE);    
-    glutInitWindowSize(900,900);         // Size of display area, in pixels.
-    glutCreateWindow("WatorGL"); // Parameter is window title.
-    glutDisplayFunc(display); // Called when the window needs to be redrawn.
-    glutReshapeFunc(reshape_callback); // In order to preserve the grid
-    glutTimerFunc(0, timer_func,0);
-    glutSpecialFunc(keyboard_callback);
-    glutKeyboardFunc(set_spawn_rate);
-    glutMainLoop(); // Run the event loop!  This function does not return.
-    return 0;
+  srand(time(0));
+  initSea();
+
+  gen_sharks(sea, 10);
+  gen_fish(sea, 300);
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_DOUBLE);    
+  glutInitWindowSize(1000,1000);
+  glutCreateWindow("WatorGL");
+  glutDisplayFunc(display); // Called when the window needs to be redrawn.
+  glutReshapeFunc(reshape_callback); // In order to preserve the grid
+  glutTimerFunc(0, timer_func,0);
+  glutSpecialFunc(keyboard_callback);
+  glutKeyboardFunc(set_spawn_rate);
+  glutMainLoop(); // Run the event loop!  This function does not return.
+  return 0;
 }
 
 

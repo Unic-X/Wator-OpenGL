@@ -6,7 +6,7 @@
 
 int ENERGY_F = 10;
 
-planer_c moveFish(Creature * creature,vector * fishes,vector * sharks);
+void moveFish(Creature *** sea, int alt, int i, int j);
 
 void drawFish(planer_c coords);
 

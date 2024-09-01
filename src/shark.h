@@ -6,7 +6,7 @@
 
 int ENERGY_S = 4;
 
-bool moveShark(Creature * creature,vector * fishes,vector * sharks);
+void moveShark(Creature *** sea, int alt, int i, int j);
 
 void drawShark(planer_c coords);
 
